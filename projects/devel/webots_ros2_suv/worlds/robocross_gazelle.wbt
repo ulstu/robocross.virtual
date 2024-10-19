@@ -1,21 +1,22 @@
 #VRML_SIM R2023b utf8
 
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackground.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/floors/protos/RectangleArena.proto"
-EXTERNPROTO "./protos/GazelleNext/GazelleNext.proto"
-EXTERNPROTO "./protos/Human/Human.proto"
-EXTERNPROTO "./protos/Kamaz/Kamaz.proto"
-EXTERNPROTO "./protos/Cow/Cow.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/road/protos/Road.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/road/protos/RoadLine.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/trees/protos/SimpleTree.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/traffic/protos/GenericTrafficLight.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/devices/velodyne/protos/VelodyneVLP-16.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/vehicles/protos/bmw/BmwX5.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/road/protos/Road.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/road/protos/RoadLine.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/trees/protos/SimpleTree.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/traffic/protos/GenericTrafficLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/devices/velodyne/protos/VelodyneVLP-16.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/humans/pedestrian/protos/Pedestrian.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/vehicles/protos/citroen/CitroenCZero.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/vehicles/protos/lincoln/LincolnMKZ.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/vehicles/protos/mercedes_benz/MercedesBenzSprinter.proto"
+EXTERNPROTO "../protos/MainRoadSign.proto"
+EXTERNPROTO "../protos/GiveWaySign.proto"
+EXTERNPROTO "../protos/PlasticBarrel.proto"
+EXTERNPROTO "../protos/GazelleNext.proto"
 
 WorldInfo {
   ERP 0.6
@@ -31,14 +32,14 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.1983012255397882 -0.06059171516359416 0.9782664606348068 3.740495463020311
-  position 41.138815674465945 -6.989775373212276 3.760392194218011
+  orientation 0.04505832372390303 -0.673816496876067 0.7375236104701035 0.3588157217500038
+  position 142.6440803310961 -33.80069707822466 1.5614983388717594
   follow "vehicle"
 }
 TexturedBackground {
 }
-GazelleNext {
-  translation 3.31885 -5.79711 0.83
+BmwX5 {
+  translation 6.08322 0.390234 1.25
   rotation 0.9929554089719524 -0.11836327798953662 0.005448872994841482 0.07212438106245643
   controller "<extern>"
   supervisor TRUE
@@ -80,10 +81,9 @@ GazelleNext {
       maxRange 40
     }
     VelodyneVLP-16 {
-      translation 1.3 0 0
     }
     Camera {
-      translation -0.24 0 0.98
+      translation -2.12 0 0.93
       children [
         Pose {
           translation -0.05 0 0
@@ -106,6 +106,11 @@ GazelleNext {
       fieldOfView 1
       width 840
       height 480
+    }
+  ]
+  sensorsSlotRear [
+    VelodyneVLP-16 {
+      name "Velodyne VLP-16_rear"
     }
   ]
   sensorsSlotTop [
@@ -1057,36 +1062,76 @@ Solid {
       }
       roadBoundingObject TRUE
     }
+    Solid {
+      translation 10 0 0.005
+      children [
+        Pose {
+          rotation 1 0 0 0.07
+          children [
+            Pose {
+              rotation 0 0 1 1.5708
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 1
+                    metalness 0
+                  }
+                  geometry Box {
+                    size 20 0.5 0.01
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+      name "stop_line"
+    }
+    Solid {
+      translation 150 -33 0.03
+      children [
+        Pose {
+          rotation 1 0 0 0.083
+          children [
+            Pose {
+              rotation 0 0 1 0.99
+              children [
+                Pose {
+                  children [
+                    Shape {
+                      appearance PBRAppearance {
+                        roughness 1
+                        metalness 0
+                      }
+                      geometry Box {
+                        size 20 0.5 0.01
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+      name "stop_line_end_adjusted"
+    }
   ]
   name "solid(1)"
 }
 Pedestrian {
-  translation 35.7255 -10.0783 1.27
-  controller "human_controller"
-  controllerArgs [
-    "pedestrian"
-  ]
-}
-Cow {
-  controller "human_controller"
-  controllerArgs [
-    ""
-  ]
-}
-Kamaz {
-  controller "human_controller"
-  controllerArgs [
-    ""
-  ]
+  translation 22.8971 -9.089 1.27
 }
 CitroenCZero {
-  translation 37.7845 -0.178133 1.1
+  translation 24.6976 -1.30106 1.1
   rotation 1 0 0 4.692820414042842e-06
   name "vehicle(1)"
+  controller "autonomous_vehicle"
 }
 LincolnMKZ {
-  translation 56.5687 0.752313 1.1
+  translation 60.3212 -9.38723 1.1
   name "vehicle(2)"
+  controller "autonomous_vehicle"
 }
 Solid {
   translation 107.72 -84.49 -1.29
@@ -1125,6 +1170,34 @@ RectangleArena {
   }
 }
 MercedesBenzSprinter {
-  translation 32.2955 4.98737 1.4
+  translation 85.174 -2.21543 1.4
   rotation 0 0 1 3.14159
+  controller "autonomous_vehicle"
+}
+MainRoadSign {
+  translation 14.5917 -11.5529 0
+  rotation 0 0 1 -3.139185307179586
+}
+GiveWaySign {
+  translation 22.9994 -11.6633 0
+  rotation 0 0 1 -3.134375307179586
+}
+PlasticBarrel {
+  translation 27.6102 -5.25097 0.21
+}
+PlasticBarrel {
+  translation 43.5735 -2.10946 0.21
+  name "PlasticBarrel(1)"
+}
+PlasticBarrel {
+  translation 13.91 -0.62 0.67
+  name "PlasticBarrel(2)"
+}
+PlasticBarrel {
+  translation 26.929 -6.2621 0.67
+  name "PlasticBarrel(3)"
+}
+GazelleNext {
+  translation 1.37434 -4.11297 0.8
+  name "vehicle(3)"
 }
