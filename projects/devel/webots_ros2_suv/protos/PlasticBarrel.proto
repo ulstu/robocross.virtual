@@ -14,7 +14,7 @@ PROTO PlasticBarrel [
   field MFString   normalTexturePath    ["models/plastic_barrel/textures/normal_map.png"]
   field SFFloat    translationStep   0.01
   field SFFloat    rotationStep      0.262
-  field SFFloat    mass              10.0        # Масса объекта в кг
+  field SFFloat    bodyMass          10.0        # Масса объекта в кг
 ] {
   Solid {
     translation IS translation
@@ -47,8 +47,17 @@ PROTO PlasticBarrel [
     ]
     name IS name
     contactMaterial IS contactMaterial
-    physics NULL
-    boundingObject NULL
+    boundingObject Cylinder {
+      height 2.5
+      radius 0.45 
+      side TRUE
+      top TRUE
+    }
+    physics Physics {
+      density -1
+      mass IS bodyMass
+      #inertiaMatrix [ ]
+    }
     locked FALSE
     radarCrossSection 0
     recognitionColors [

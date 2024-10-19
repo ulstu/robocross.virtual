@@ -5,19 +5,19 @@
 
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/appearances/protos/GlossyPaint.proto"
 
-PROTO Cow [
-  field SFVec3f    translation              0 0 0
-  field SFRotation rotation                 0 0 1 0
-  field SFString   name                     "cow"
-  field SFString   controller               "<generic>"
-  field MFString   controllerArgs           []
+PROTO Kamaz [
+  field SFVec3f    translation  0 0 0
+  field SFRotation rotation     0 0 1 0
+  field SFString   name         "kamaz"
+  field SFString     controller               "<generic>"
+  field MFString     controllerArgs           []
 ]
 {
   Solid {
     translation IS translation
     rotation IS rotation
     name IS name
-    model "cow"
+    model "kamaz"
     children [
       Transform {
         children [
@@ -27,7 +27,7 @@ PROTO Cow [
             children [
               CadShape {
                 url [
-                  "models/Cow.dae"
+                  "models/Kamaz.dae"
                 ]
               }
             ]
