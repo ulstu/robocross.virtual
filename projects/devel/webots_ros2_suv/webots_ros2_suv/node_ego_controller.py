@@ -24,8 +24,6 @@ from PIL import Image
 from .lib.timeit import timeit
 from .lib.orientation import euler_from_quaternion
 from .lib.map_server import start_web_server, MapWebServer
-from .lib.param_loader import ParamLoader
-from .lib.config_loader import ConfigLoader
 from .lib.world_model import WorldModel
 from robot_interfaces.srv import PoseService
 from robot_interfaces.msg import EgoPose
@@ -71,6 +69,9 @@ class NodeEgoController(Node):
         range_image = image / SENSOR_DEPTH
 
     def drive(self):
+        self.__world_model.command_message.speed = 10.0
+        self.__world_model.command_message.steering_angle = 0.0
+
         self.__ackermann_publisher.publish(self.__world_model.command_message)
 
     #@timeit
@@ -86,7 +87,7 @@ class NodeEgoController(Node):
         t2 = time.time()
         
         delta = t2 - t1
-        fps = 1 / delta
+        fps = 1 / delta if delta > 0 else 100
         self._logger.info(f"Current FPS: {fps}")
 
         pos = self.__world_model.get_current_position()

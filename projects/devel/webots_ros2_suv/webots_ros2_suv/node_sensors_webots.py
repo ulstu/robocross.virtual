@@ -12,7 +12,6 @@ from rclpy.qos import qos_profile_sensor_data, QoSReliabilityPolicy
 from rclpy.node import Node
 from scipy.spatial.transform import Rotation
 from .lib.orientation import quaternion_from_euler, euler_from_quaternion
-from prometheus_client import start_http_server
 import traceback
 from webots_ros2_driver.utils import controller_url_prefix
 
@@ -73,8 +72,6 @@ class NodeSensorsWebots(Node):
     
     def __on_point_cloud(self, data):
         try:
-            self.__lidar_last_time = self.set_last_time(self.__lidar_last_time, set_lidar_hz)
-
             p = data
             p.header.stamp = self.get_clock().now().to_msg()
             p.header.frame_id = 'base_link'
@@ -85,7 +82,6 @@ class NodeSensorsWebots(Node):
 
     def __on_point_cloud2(self, data):
         try:
-            self.__lidar_last_time = self.set_last_time(self.__lidar_last_time, set_lidar_hz)
             p = data
             p.header.stamp = self.get_clock().now().to_msg()
             p.header.frame_id = 'base_link'
@@ -98,8 +94,6 @@ class NodeSensorsWebots(Node):
         try:
             if not self.__cur_imu_data:
                 return 
-            self.__gnss_last_time = self.set_last_time(self.__gnss_last_time, set_gnss_hz)
-
             (roll, pitch, yaw) = euler_from_quaternion(self.__cur_imu_data.orientation.x, self.__cur_imu_data.orientation.y, self.__cur_imu_data.orientation.z, self.__cur_imu_data.orientation.w)
             stamp = self.get_clock().now().to_msg()
             msg = NavSatFix()
