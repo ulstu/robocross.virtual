@@ -1,7 +1,8 @@
 MAKEFLAGS+=--silent
 UID:=$(shell id -u)
 DOCKER_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-PROJECT_DIR:=$(shell dirname ${DOCKER_DIR})
+#PROJECT_DIR:=$(shell dirname ${DOCKER_DIR})
+PROJECT_DIR:=${DOCKER_DIR}
 NVIDIA_GPU:=$(shell (docker info | grep Runtimes | grep nvidia 1> /dev/null && command -v nvidia-smi 1>/dev/null 2>/dev/null && nvidia-smi | grep Processes 1>/dev/null 2>/dev/null) && echo '--runtime nvidia --gpus all' || echo '')
 IMAGE=ulstu
 
@@ -14,7 +15,7 @@ WEBOTS_STREAM_PORT=1234
 
 #
 
-all: test-nvidia copy-working-folders  run copy-working-files start-code-server 
+all: test-nvidia run copy-working-files start-code-server 
 allmac: copy-working-folders  run copy-working-files start-code-server 
 colors:
 	$(eval NC=\033[1;0m)
@@ -64,13 +65,17 @@ copy-working-files:
 	docker exec -it ulstu-${FLAVOR} ln -s /ulstu/repositories/robot_interfaces /ulstu/ros2_ws/src/robot_interfaces ; \
 
 copy-working-folders:
-	if [ -d ${PROJECT_DIR}/docker/projects/${FLAVOR}/]; then \
+	if [ -d ${PROJECT_DIR}/projects/${FLAVOR}/]; then \
         echo "project dir exists. Remove it first" ; \
 	else \
-        mkdir ${PROJECT_DIR}/docker/projects/${FLAVOR} && \
+        mkdir ${PROJECT_DIR}/projects/${FLAVOR} && \
         cp -r ${PROJECT_DIR}/webots_ros2_suv ${PROJECT_DIR}/docker/projects/${FLAVOR}/webots_ros2_suv  && \
         cp -r ${PROJECT_DIR}/robot_interfaces ${PROJECT_DIR}/docker/projects/${FLAVOR}/robot_interfaces ; \
     fi
+
+
+td:
+	echo ${PROJECT_DIR}
 
 start-code-server:
 	docker exec -d -it ulstu-${FLAVOR} bash -c 'pgrep code-server || code-server /ulstu/ros2_ws' && \
