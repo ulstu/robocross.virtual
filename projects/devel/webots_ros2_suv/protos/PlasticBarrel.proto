@@ -47,16 +47,25 @@ PROTO PlasticBarrel [
     ]
     name IS name
     contactMaterial IS contactMaterial
-    boundingObject Cylinder {
-      height 2.5
-      radius 0.45 
-      side TRUE
-      top TRUE
+    boundingObject Transform {
+      translation -0.05 -0.05 0.75  # Смещение цилиндра вверх, чтобы центр совпадал с нижней частью бочки
+      children [
+#        Box {
+#          size 0.8 0.8 1.4
+#        }
+        Cylinder {
+          height 1.4
+          radius 0.45
+          side TRUE
+          top TRUE
+        }
+      ]
     }
     physics Physics {
       density -1
       mass IS bodyMass
-      #inertiaMatrix [ ]
+#      inertiaMatrix [ 3.958 0 0  0 3.958 0  0 0 1.25 ]
+      centerOfMass [ 0 0 0.5 ] 
     }
     locked FALSE
     radarCrossSection 0

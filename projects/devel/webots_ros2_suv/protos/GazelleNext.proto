@@ -385,29 +385,29 @@ PROTO GazelleNext [
     boundingObject Group {
       children [
         Transform {
-          translation 2.6775 0 0.29
+          translation 3.7 0 0.8
           rotation 0.57735 0.57735 0.57735 2.094395
           children [
             Box {
-              size 1.73 0.76 2
+              size 2.0 2.16 3.2
             }
           ]
         }
         Transform {
-          translation 0.5875 0 0.63
+          translation 3.95 0.02 1.13
           rotation 0.57735 0.57735 0.57735 2.094395
           children [
             Box {
-              size 1.73 1.44 2.14
+              size 2.48 0.35 0.15
             }
           ]
         }
         Transform {
-          translation -0.1725 0 0.53
+          translation 0.5 0 0.05
           rotation 0.57735 0.57735 0.57735 2.094395
           children [
             Box {
-              size 1.73 0.78 1.41
+              size 2.0 0.78 3.41
             }
           ]
         }

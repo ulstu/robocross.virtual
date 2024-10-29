@@ -40,7 +40,7 @@ def get_ros2_nodes(*args):
     package_dir = get_package_share_directory(PACKAGE_NAME)
     urdf = os.path.join(
         package_dir,
-        os.path.join(package_dir, pathlib.Path(os.path.join(package_dir, 'resource', 'suv.urdf'))))
+        os.path.join(package_dir, pathlib.Path(os.path.join(package_dir, 'resource', 'gazelle.urdf'))))
     with open(urdf, 'r') as infp:
         robot_desc = infp.read()
 
