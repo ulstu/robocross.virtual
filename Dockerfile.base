@@ -111,10 +111,13 @@ RUN cat /tmp/bashrc >> /ulstu/.bashrc && \
     mkdir  -p /ulstu/ros2_ws/src && \
     chown -R ulstu:ulstu /ulstu
 
+
 #RUN sudo -E rosdep init 
 RUN apt-get install -y python3-vcstool
 RUN rosdep --rosdistro "${ROS_DISTRO}" update 
 RUN cd /ulstu/ros2_ws && yes | rosdep --rosdistro "${ROS_DISTRO}" install -r --from-paths src --ignore-src
+
+RUN pip3 install matplotlib scipy --upgrade 
 
 USER ulstu
 WORKDIR /ulstu/ros2_ws

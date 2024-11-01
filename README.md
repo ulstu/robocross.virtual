@@ -3,13 +3,13 @@
 
 ## Требования к компьютеру
 
-* OS Windows 10 или Linux Ubuntu версии от 20
+* OS Windows версии >= 10 или Linux Ubuntu версии >= 20
 * Доступное файловое хранилище не менее 40Гб
 * ОЗУ не менее 8Гб
-* GPU NVidia не старше 1060
+* GPU NVidia серии >= 1060
 * CPU Intel i5 и выше
 
-## Установка в Windows
+## Установка в среде Docker в Windows
 
 1. Установите [git](https://git-scm.com/download/win) и [docker](https://docs.docker.com/desktop/install/windows-install/)
 
@@ -30,27 +30,32 @@ cd robocross.virtual
 Команда выполняется около одного часа. Наберитесь терпения.
 Если в процессе установки возникнет проблема, то перезапустите Docker engine и заново выполните скрипт.
 
-5. Создайте docker контейнер командой
+5. Создайте docker контейнер командой (по умолчанию имя контейнера ulstu-devel)
 ```bash
 .\run_windows.bat run
 ```
 
-6. Скопируйте исходные файлы шаблонного решения в файловую систему контейнера
+6. Создайте символические ссылки для рабочих директорий в папке ~/ros2_ws в контейнере командой
 ```bash
-.\run_windows.bat copy-working-folders
+.\run_windows.bat setup-environment
 ```
 
-7. Создайте символические ссылки для рабочих директорий в папке ~/ros2_ws в контейнере
+Если Вы установили Docker в связке с WSL, то нужно еще выполнить команду
 ```bash
-.\run_windows.bat copy-working-files
+.\run_windows.bat wsl-fix
 ```
 
-8. Запустите Visual Studio Code Server командой 
+7. Запустите Visual Studio Code Server командой 
 ```bash
 .\run_windows.bat start-code-server
 ```
 
-## Установка в Linux
+```bash
+pip install --upgrade matplotlib scipy
+```
+
+
+## Установка в среде Docker в Linux
 
 1. Установите `git`, `make`, `curl`, и `docker`
 
@@ -65,13 +70,13 @@ curl -sSL https://get.docker.com | sh && sudo usermod -aG docker $USER
    
    Установите [nvidia-container-toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) для обработки данных в GPU.
 
-2. Запустите сценарий подготовки, чтобы получить образ и запустить контейнер:
+2. Запустите сценарий подготовки, чтобы собрать образ и запустить контейнер:
 
 ```sh
 make build
 ```
    
-Дождитесь завершения работы скрипта (до 1 часа)
+Дождитесь завершения работы скрипта (около 1 часа)
 
 3. Настройка и запуск
 Опционально: 

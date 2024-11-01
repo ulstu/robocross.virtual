@@ -15,7 +15,7 @@ EXTERNPROTO "../protos/GazelleNext.proto"
 WorldInfo {
   ERP 0.6
   basicTimeStep 60
-  FPS 8
+  FPS 30
   optimalThreadCount 4
   lineScale 1
   contactProperties [
