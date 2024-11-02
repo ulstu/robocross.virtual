@@ -6,7 +6,7 @@ ARG UID=1000
 
 # User
 RUN useradd -d /ulstu -m \
-    -u $UID -U \
+    -u 1000 -U \
     -s /usr/bin/bash \
     -G dialout \
     -c "Ulstu Robotics" ulstu && \

@@ -49,12 +49,13 @@ docker run --ipc=host ^
      --restart unless-stopped ^
       -p %ROBOT_PANEL_PORT%:8008 -p %VS_PORT%:31415 -p %WEBOTS_STREAM_PORT%:1234 ^
       -e NVIDIA_DRIVER_CAPABILITIES=all %NVIDIA_GPU% ^
+      -e DISPLAY=host.docker.internal:0 ^
       -v %USERPROFILE%/.Xauthority:/ulstu/.host/.Xauthority:ro ^
       -e DISPLAY=$DISPLAY ^
       -e WAYLAND_DISPLAY=$WAYLAND_DISPLAY ^
       --device=/dev/dxg ^
       -v /usr/lib/wsl:/usr/lib/wsl ^
-      -it --gpus all --device /dev/dri:/dev/dri --privileged ^
+      -it --gpus all  ^
       -e LD_LIBRARY_PATH=/usr/lib/wsl/lib ^
       -v /mnt/wslg:/mnt/wslg ^
       -v /tmp/.X11-unix/:/tmp/.X11-unix:rw ^

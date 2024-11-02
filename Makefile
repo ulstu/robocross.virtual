@@ -5,17 +5,17 @@ DOCKER_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 PROJECT_DIR:=${DOCKER_DIR}
 NVIDIA_GPU:=$(shell (docker info | grep Runtimes | grep nvidia 1> /dev/null && command -v nvidia-smi 1>/dev/null 2>/dev/null && nvidia-smi | grep Processes 1>/dev/null 2>/dev/null) && echo '--runtime nvidia --gpus all' || echo '')
 IMAGE=ulstu
-
 FLAVOR=devel
 ROBOT_PANEL_PORT=8008
 VS_PORT=31415
 WEBOTS_STREAM_PORT=1234
+DISPLAY=:1
 
 .PHONY: all
 
 #
 
-all: copy-working-folders run copy-working-files start-code-server 
+all: run copy-working-files start-code-server 
 colors:
 	$(eval NC=\033[1;0m)
 	$(eval RED=\033[1;31m)
@@ -30,24 +30,30 @@ buildmacos:
 	echo ${NO_CACHE_ARG}
 	docker build --platform=linux/amd64 ${DOCKER_DIR} -f ${DOCKER_DIR}/Dockerfile.base -t ulstu ${DOCKER_ARGS} --build-arg UID=${UID} 
 #--net=host 
+#--runtime=nvidia \
 
 run: 
-	docker run \
-		--ipc=host \
+	docker run --ipc=host \
 		--cap-add SYS_ADMIN \
-		--name ulstu-${FLAVOR} \
+		--name ${IMAGE}-${FLAVOR} \
+		--add-host=host.docker.internal:host-gateway \
+		--net=host \
 		--privileged \
 		--restart unless-stopped \
-		-p ${ROBOT_PANEL_PORT}:8008 \
-		-p ${VS_PORT}:31415 \
-		-p ${WEBOTS_STREAM_PORT}:1234 \
+		-p ${ROBOT_PANEL_PORT}:8008 -p ${VS_PORT}:31415 -p ${WEBOTS_STREAM_PORT}:1234 \
 		-e NVIDIA_DRIVER_CAPABILITIES=all ${NVIDIA_GPU} \
 		-e DISPLAY=${DISPLAY} \
 		-v ~/.Xauthority:/ulstu/.host/.Xauthority:ro \
+		-e WAYLAND_DISPLAY=$WAYLAND_DISPLAY \
+      	-e DISPLAY=:1 \
+		--device=/dev/dxg \
+		-v /usr/lib/wsl:/usr/lib/wsl \
+		-it --gpus all --device /dev/dri:/dev/dri \
+		-e LD_LIBRARY_PATH=/usr/lib/wsl/lib \
+		-v /mnt/wslg:/mnt/wslg \
 		-v /tmp/.X11-unix/:/tmp/.X11-unix:rw \
-		-v /dev/dri:/dev/dri:ro \
 		-v /dev:/dev:rw \
-		-v ${PROJECT_DIR}/docker/projects/${FLAVOR}:/ulstu/repositories:rw \
+		-v ${PROJECT_DIR}/projects/${FLAVOR}:/ulstu/repositories:rw \
 		-d -it ${IMAGE} 1>/dev/null
 
 test-nvidia: colors
@@ -60,8 +66,9 @@ test-nvidia: colors
 	true
 
 copy-working-files:
-	docker exec -it ulstu-${FLAVOR} ln -s /ulstu/repositories/webots_ros2_suv /ulstu/ros2_ws/src/webots_ros2_suv && \
-	docker exec -it ulstu-${FLAVOR} ln -s /ulstu/repositories/robot_interfaces /ulstu/ros2_ws/src/robot_interfaces ; \
+	docker exec -it ${IMAGE}-${FLAVOR} ln -s /ulstu/repositories/webots_ros2_suv /ulstu/ros2_ws/src/webots_ros2_suv && \
+	docker exec -it ${IMAGE}-${FLAVOR} ln -s /ulstu/repositories/robot_interfaces /ulstu/ros2_ws/src/robot_interfaces ; \
+
 
 copy-working-folders:
 	if [ -d ${PROJECT_DIR}/docker/projects/${FLAVOR}/]; then \

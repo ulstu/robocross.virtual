@@ -9,6 +9,8 @@
 * GPU NVidia серии >= 1060
 * CPU Intel i5 и выше
 
+Ниже описаны инструкции для установки в Windows и Linux Ubuntu в среде docker
+
 ## Установка в среде Docker в Windows
 
 1. Установите [git](https://git-scm.com/download/win) и [docker](https://docs.docker.com/desktop/install/windows-install/)
@@ -50,14 +52,14 @@ cd robocross.virtual
 .\run_windows.bat start-code-server
 ```
 
+Для удобства команды 4-7 можно выполнить одной командой
 ```bash
-pip install --upgrade matplotlib scipy
+./run_windows_first.bat
 ```
-
 
 ## Установка в среде Docker в Linux
 
-1. Установите `git`, `make`, `curl`, и `docker`
+1. Установите `git`, `make`, `curl`, `docker`, `nvidia-container-toolkit`, `nvidia-docker2`
 
 ```sh
 sudo apt install git make curl
@@ -82,9 +84,9 @@ make build
 Опционально: 
 откройте файл start.sh и определите в нем значения переменных:
 * название контейнера FLAVOR
-* порт для vscode VS_PORT (10002 по умолчанию)
-* порт для визуализации сцены webots WEBOTS_STREAM_PORT (10003 по умолчанию)
-* порт для дашборда робота ROBOT_PANEL_PORT (10001 по умолчанию)).
+* порт для vscode VS_PORT (31415 по умолчанию)
+* порт для визуализации сцены webots WEBOTS_STREAM_PORT (1234 по умолчанию)
+* порт для дашборда робота ROBOT_PANEL_PORT (8008 по умолчанию)).
 
 Запустите скрипт start.sh
 ```sh

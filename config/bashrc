@@ -1,10 +1,7 @@
 export WEBOTS_HOME=/usr/local/webots
-export WEBOTS_OFFSCREEN=0
-export DISPLAY=host.docker.internal:0
+export WEBOTS_OFFSCREEN=1
 export LIBGL_ALWAYS_INDIRECT=0
 export LIBGL_ALWAYS_SOFTWARE=0
-export __GLX_VENDOR_LIBRARY_NAME=nvidia
-export NVIDIA_DRIVER_CAPABILITIES=all
 export USERNAME=default
 
 
