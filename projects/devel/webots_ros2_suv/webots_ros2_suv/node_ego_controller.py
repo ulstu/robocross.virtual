@@ -43,7 +43,7 @@ class NodeEgoController(Node):
             
             package_dir = get_package_share_directory("webots_ros2_suv")
 
-            self.create_subscription(Odometry, '/odom', self.__on_gps_message, qos)
+            self.create_subscription(Odometry, '/odom', self.__on_odom_message, qos)
             self.create_subscription(sensor_msgs.msg.Image, '/vehicle/camera/image_color', self.__on_image_message, qos)
             self.create_subscription(sensor_msgs.msg.PointCloud2, "/lidar", self.__on_lidar_message, qos)
 
@@ -97,7 +97,7 @@ class NodeEgoController(Node):
         if self.__ws is not None:
             self.__ws.update_model(self.__world_model)
 
-    def __on_gps_message(self, data):
+    def __on_odom_message(self, data):
             roll, pitch, yaw = euler_from_quaternion(data.pose.pose.orientation.x, data.pose.pose.orientation.y, data.pose.pose.orientation.z, data.pose.pose.orientation.w)
             lat, lon, orientation = self.__world_model.coords_transformer.get_global_coords(data.pose.pose.position.x, data.pose.pose.position.y, yaw)
             self.__world_model.update_car_pos(lat, lon, orientation)
