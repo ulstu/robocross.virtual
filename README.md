@@ -111,9 +111,9 @@ source install/setup.bash
 ros2 launch webots_ros2_suv robot_launch.py
 ```
 
-2. Доступ к визуализации сцены после запуска: http://localhost:8008, WEBOTS_STREAM_PORT
+2. Доступ к визуализации сцены после запуска: http://localhost:1234/index.html, WEBOTS_STREAM_PORT по умолчанию 1234
 
-3. Доступ к панели управления роботом: http://localhost:1234/index.html, ROBOT_PANEL_PORT по умолчанию 1234
+3. Доступ к панели управления роботом: , http://localhost:8008 ROBOT_PANEL_PORT по умолчанию 8008
 
 
 ## Установка через docker в MacOS m1 не поддерживается, т.к. отсутствует linux дистрибутив webots arm
