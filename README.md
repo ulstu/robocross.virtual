@@ -53,11 +53,6 @@ cd robocross.virtual
 .\run_windows.bat start-code-server
 ```
 
-Для удобства команды 4-7 можно выполнить одной командой
-```bash
-./run_windows_first.bat
-```
-
 ## Установка в среде Docker в Linux
 
 1. Установите `git`, `make`, `curl`, `docker`, `nvidia-container-toolkit`, `nvidia-docker2`
