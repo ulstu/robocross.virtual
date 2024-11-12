@@ -85,11 +85,11 @@ docker exec -it %IMAGE%-%FLAVOR% mkdir /ulstu/ros2_ws/data/paths
 goto end
 
 :wsl-fix
-docker cp ulstu-devel:/ulstu/.bashrc C:\Windows\Temp\.bashrc
+docker cp %IMAGE%-%FLAVOR%:/ulstu/.bashrc C:\Windows\Temp\.bashrc
 echo export LD_LIBRARY_PATH=/usr/lib/wsl/lib >> C:\Windows\Temp\.bashrc
 echo export DISPLAY=host.docker.internal:0 >> C:\Windows\Temp\.bashrc
 echo export MESA_D3D12_DEFAULT_ADAPTER_NAME=NVIDIA >> C:\Windows\Temp\.bashrc
-docker cp C:\Windows\Temp\.bashrc ulstu-devel:/ulstu/.bashrc
+docker cp C:\Windows\Temp\.bashrc %IMAGE%-%FLAVOR%:/ulstu/.bashrc
 docker exec -it %IMAGE%-%FLAVOR% sudo sed -i -e "s|return 'microsoft-standard' in uname().release|return False|" /opt/ros/humble/local/lib/python3.10/dist-packages/webots_ros2_driver/utils.py
 docker exec -it %IMAGE%-%FLAVOR% sudo sed -i "s/\r$//g" /ulstu/.bashrc
 
