@@ -50,18 +50,22 @@ docker run --ipc=host ^
       -p %ROBOT_PANEL_PORT%:8008 -p %VS_PORT%:31415 -p %WEBOTS_STREAM_PORT%:1234 ^
       -e NVIDIA_DRIVER_CAPABILITIES=all %NVIDIA_GPU% ^
       -e DISPLAY=host.docker.internal:0 ^
-      -v %USERPROFILE%/.Xauthority:/ulstu/.host/.Xauthority:ro ^
-      -e DISPLAY=$DISPLAY ^
       -e WAYLAND_DISPLAY=$WAYLAND_DISPLAY ^
-      --device=/dev/dxg ^
-      -v /usr/lib/wsl:/usr/lib/wsl ^
-      -it --gpus all  ^
+      -e PULSE_SERVER=$PULSE_SERVER ^
+      -e XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR ^
       -e LD_LIBRARY_PATH=/usr/lib/wsl/lib ^
+      -v %USERPROFILE%/.Xauthority:/ulstu/.host/.Xauthority:ro ^
+      -v /mnt/wslg:/mnt/wslg ^
+      -v /usr/lib/wsl:/usr/lib/wsl ^
+      -v /usr/lib/wsl:/usr/lib/wsl ^
       -v /mnt/wslg:/mnt/wslg ^
       -v /tmp/.X11-unix/:/tmp/.X11-unix:rw ^
       -v /dev/dri:/dev/dri:ro ^
       -v /dev:/dev:rw ^
       -v %PROJECT_DIR%/projects/%FLAVOR%:/ulstu/repositories:rw ^
+      --device /dev/dri/card0 --device /dev/dri/renderD128  ^
+      --device=/dev/dxg ^
+      -it --gpus all  ^
       -d -it %IMAGE%
 goto end
 
@@ -81,8 +85,15 @@ docker exec -it %IMAGE%-%FLAVOR% mkdir /ulstu/ros2_ws/data/paths
 goto end
 
 :wsl-fix
+docker cp ulstu-devel:/ulstu/.bashrc C:\Windows\Temp\.bashrc
+echo export LD_LIBRARY_PATH=/usr/lib/wsl/lib >> C:\Windows\Temp\.bashrc
+echo export DISPLAY=host.docker.internal:0 >> C:\Windows\Temp\.bashrc
+echo export MESA_D3D12_DEFAULT_ADAPTER_NAME=NVIDIA >> C:\Windows\Temp\.bashrc
+docker cp C:\Windows\Temp\.bashrc ulstu-devel:/ulstu/.bashrc
 docker exec -it %IMAGE%-%FLAVOR% sudo sed -i -e "s|return 'microsoft-standard' in uname().release|return False|" /opt/ros/humble/local/lib/python3.10/dist-packages/webots_ros2_driver/utils.py
 docker exec -it %IMAGE%-%FLAVOR% sudo sed -i "s/\r$//g" /ulstu/.bashrc
+
+
 goto end
 
 :copy-working-folders

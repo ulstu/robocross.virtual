@@ -45,6 +45,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y -o Dpkg::Option
     rsync \
     dialog \
     nano \
+    software-properties-common \
     fuse
 
 RUN apt install --yes xvfb ffmpeg lsb-release g++ make libavcodec-extra libglu1-mesa libegl1 libxkbcommon-x11-dev libxcb-keysyms1 libxcb-image0 libxcb-icccm4 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcomposite-dev libxtst6 libnss3    

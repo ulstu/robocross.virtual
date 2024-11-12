@@ -15,8 +15,7 @@
 
 ## Установка в среде Docker в Windows
 
-1. Установите [git](https://git-scm.com/download/win) и [docker](https://docs.docker.com/desktop/install/windows-install/)
-
+1. Установите [git](https://git-scm.com/download/win), [docker](https://docs.docker.com/desktop/install/windows-install/), [wsl2](https://www.solveyourtech.com/how-to-install-wsl2-on-windows-11-a-step-by-step-guide-for-beginners/) и внутри wsl установите [nvidia-container-toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#installing-with-apt)
 2. Склонируйте репозиторий в выбранную папку на компьютере 
 ```bash
 git clone https://github.com/ulstu/robocross.virtual.git
