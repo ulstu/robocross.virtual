@@ -88,12 +88,12 @@ RUN apt-get update && \
     mkdir -p /ulstu/.config/Cyberbotics
 
 # Groot
-RUN curl -L -o /opt/Groot2.AppImge \
-    'https://s3.us-west-1.amazonaws.com/download.behaviortree.dev/groot2_linux_installer/Groot2-v1.5.2-x86_64.AppImage' && \
-    chmod +x /opt/Groot2.AppImge && \
-    ln -sf /opt/Groot2.AppImge /usr/bin/groot2
+# RUN curl -L -o /opt/Groot2.AppImge \
+#     'https://s3.us-west-1.amazonaws.com/download.behaviortree.dev/groot2_linux_installer/Groot2-v1.5.2-x86_64.AppImage' && \
+#     chmod +x /opt/Groot2.AppImge && \
+#     ln -sf /opt/Groot2.AppImge /usr/bin/groot2
 
-RUN pip3 install scipy transforms3d fastseg prometheus_client cameratransform cherrypy pyyaml lapx ultralytics pyserial json-rpc shapely pyproj geopy tensorflow scikit-learn
+RUN pip3 install  --no-cache-dir  scipy transforms3d fastseg prometheus_client cameratransform cherrypy pyyaml lapx ultralytics pyserial json-rpc shapely pyproj geopy tensorflow scikit-learn
 
 #HOTFIX: https://github.com/ros-controls/ros2_controllers/issues/482
 RUN wget -O /tmp/diff_drive_controller.deb http://snapshots.ros.org/humble/2022-11-23/ubuntu/pool/main/r/ros-humble-diff-drive-controller/ros-humble-diff-drive-controller_2.12.0-1jammy.20221108.202153_amd64.deb && \
