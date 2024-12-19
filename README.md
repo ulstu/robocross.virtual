@@ -10,6 +10,7 @@
 * ОЗУ не менее 8Гб
 * GPU NVidia серии >= 1060
 * CPU Intel i5 и выше
+* Актуальные версии  docker и драйверов nvidia
 
 Ниже описаны инструкции для установки в Windows и Linux Ubuntu в среде docker
 
