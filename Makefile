@@ -5,10 +5,10 @@ DOCKER_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 PROJECT_DIR:=${DOCKER_DIR}
 NVIDIA_GPU:=$(shell (docker info | grep Runtimes | grep nvidia 1> /dev/null && command -v nvidia-smi 1>/dev/null 2>/dev/null && nvidia-smi | grep Processes 1>/dev/null 2>/dev/null) && echo '--runtime nvidia --gpus all' || echo '')
 IMAGE=ulstu
-FLAVOR=devel
-ROBOT_PANEL_PORT=8008
-VS_PORT=31415
-WEBOTS_STREAM_PORT=1234
+FLAVOR ?= devel
+ROBOT_PANEL_PORT ?= 8008
+VS_PORT ?= 31415
+WEBOTS_STREAM_PORT ?= 1234
 DISPLAY=:1
 
 .PHONY: all
@@ -29,15 +29,13 @@ build:
 buildmacos:
 	echo ${NO_CACHE_ARG}
 	docker build --platform=linux/amd64 ${DOCKER_DIR} -f ${DOCKER_DIR}/Dockerfile.base -t ulstu ${DOCKER_ARGS} --build-arg UID=${UID} 
-#--net=host 
-#--runtime=nvidia \
+#--runtime=nvidia 
 
 run: 
 	docker run --ipc=host \
 		--cap-add SYS_ADMIN \
 		--name ${IMAGE}-${FLAVOR} \
 		--add-host=host.docker.internal:host-gateway \
-		--net=host \
 		--privileged \
 		--restart unless-stopped \
 		-p ${ROBOT_PANEL_PORT}:8008 -p ${VS_PORT}:31415 -p ${WEBOTS_STREAM_PORT}:1234 \
@@ -47,14 +45,16 @@ run:
 		-e WAYLAND_DISPLAY=$WAYLAND_DISPLAY \
       	-e DISPLAY=:1 \
 		--device=/dev/dxg \
-		-v /usr/lib/wsl:/usr/lib/wsl \
 		-it --gpus all --device /dev/dri:/dev/dri \
 		-e LD_LIBRARY_PATH=/usr/lib/wsl/lib \
-		-v /mnt/wslg:/mnt/wslg \
 		-v /tmp/.X11-unix/:/tmp/.X11-unix:rw \
 		-v /dev:/dev:rw \
-		-v ${PROJECT_DIR}/projects/${FLAVOR}:/ulstu/repositories:rw \
+		-v ${PROJECT_DIR}/projects/devel:/ulstu/repositories:rw \
 		-d -it ${IMAGE} 1>/dev/null
+
+#--net=host 
+#-v /usr/lib/wsl:/usr/lib/wsl 
+#-v /mnt/wslg:/mnt/wslg 
 
 test-nvidia: colors
 	lspci | grep -qi nvidia && base64 --decode massage | unxz || true
