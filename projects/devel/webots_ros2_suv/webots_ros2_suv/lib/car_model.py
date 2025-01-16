@@ -1,4 +1,6 @@
 import rclpy
+from ackermann_msgs.msg import AckermannDrive
+
 
 class CarModel(object):
     '''
@@ -11,6 +13,13 @@ class CarModel(object):
         self.__lat = 0
         self.__lon = 0
         self.__orientation = 0
+        self.path = None                    # спланированный путь в координатах BEV
+        self.gps_path = None                # спланированный путь в глобальных координатах
+        self.rgb_image = None               # цветное изображение с камеры
+        self.range_image = None             # изображение с камеры глубины
+        self.point_cloud = None             # облако точек от лидара
+        self.command_message = AckermannDrive() # Сообщение типа AckermanDrive для движения автомобиля
+
 
     def update(self, speed=None, lat=None, lon=None, orientation=None):
         if speed:

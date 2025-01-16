@@ -81,10 +81,19 @@ def generate_launch_description():
 
     webots = WebotsLauncher(world=PathJoinSubstitution([package_dir, 'worlds', world]), ros2_supervisor=True, stream=True)
     robot_description_path = os.path.join(package_dir, pathlib.Path(os.path.join(package_dir, 'resource', 'suv.urdf')))
+    robot1_description_path = os.path.join(package_dir, pathlib.Path(os.path.join(package_dir, 'resource', 'suv1.urdf')))
     vehicle_driver = WebotsController(
         robot_name='vehicle',
         parameters=[
             {'robot_description': robot_description_path}
+        ],
+        respawn=True
+    )
+
+    vehicle_driver1 = WebotsController(
+        robot_name='vehicle1',
+        parameters=[
+            {'robot_description': robot1_description_path}
         ],
         respawn=True
     )
@@ -98,6 +107,7 @@ def generate_launch_description():
         webots,
         webots._supervisor,
         vehicle_driver,
+        vehicle_driver1,
         launch.actions.RegisterEventHandler(
         event_handler=launch.event_handlers.OnProcessExit(
              target_action=webots,

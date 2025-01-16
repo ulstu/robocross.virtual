@@ -28,8 +28,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.052898974843480426 0.7671049686515109 0.6393368951739553 0.15578716600835077
-  position -16.250334258928135 -10.645205199774356 6.760112233181286
+  orientation 0.08227416815162038 0.12505776379582384 -0.9887322777017785 0.9694520471719114
+  position -17.71020654360757 21.16057447492014 9.478987075036192
   follow "vehicle"
 }
 TexturedBackground {
@@ -1067,6 +1067,83 @@ PlasticBarrel {
 }
 GazelleNext {
   translation 2.43536 -4.76087 0.5
+  controller "<extern>"
+  supervisor TRUE
+  sensorsSlotFront [
+    Lidar {
+      translation -0.95 0 1.52
+      name "lidar_base"
+      horizontalResolution 1024
+      fieldOfView 6.28318
+      verticalFieldOfView 0.6
+      numberOfLayers 64
+      minRange 1.5
+      maxRange 100
+    }
+    RangeFinder {
+      translation 0 0 0.2
+      name "range_finder"
+      fieldOfView 1
+      width 840
+      height 480
+      minRange 0.5
+      maxRange 40
+    }
+    Camera {
+      translation -0.25 0 1.15
+      children [
+        Pose {
+          translation -0.05 0 0
+          rotation 0 -1 0 1.5708
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.8 0.8 0.8
+                roughness 1
+                metalness 0
+              }
+              geometry Cylinder {
+                height 0.1
+                radius 0.04
+              }
+            }
+          ]
+        }
+      ]
+      fieldOfView 1
+      width 840
+      height 480
+    }
+  ]
+  sensorsSlotTop [
+    Compass {
+      translation 0.4 0 0.3
+    }
+    InertialUnit {
+      translation 0.4 0 0.3
+      name "inertial_unit"
+    }
+    Accelerometer {
+      translation 0.4 0 0
+    }
+    Gyro {
+    }
+    GPS {
+      translation 0.4 0 0.3
+    }
+  ]
+  sensorsSlotCenter [
+    Radar {
+    }
+    Display {
+      width 200
+      height 160
+    }
+  ]
+}
+GazelleNext {
+  translation 4.14269 2.48842 0.5
+  name "vehicle1"
   controller "<extern>"
   supervisor TRUE
   sensorsSlotFront [

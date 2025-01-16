@@ -77,7 +77,7 @@ class MapWebServer(object):
         if self.world_model is None:
             return None
         try:
-            pos = self.world_model.get_current_position()
+            pos = self.world_model.get_current_position('vehicle')
             self.driving_points.append([pos[0], pos[1]])
         except Exception as e:
             return {'status' : 'error', 'message': ''.join(traceback.TracebackException.from_exception(e).format())}
@@ -156,9 +156,10 @@ class MapWebServer(object):
         if self.world_model is None:
             return None
         if img_type == "obj_detector":
-            if self.world_model.rgb_image is None: # img_front_objects_lines_signs_markings
+            rgb = self.world_model.get_rgb_image('vehicle')
+            if rgb is None: # img_front_objects_lines_signs_markings
                 return None
-            data = self.world_model.rgb_image
+            data = rgb
         else:
             return None
         cherrypy.response.headers['Content-Type'] = "image/png"

@@ -27,6 +27,9 @@ from .lib.map_server import start_web_server, MapWebServer
 from .lib.world_model import WorldModel
 from robot_interfaces.srv import PoseService
 from robot_interfaces.msg import EgoPose
+from datetime import timedelta
+from builtin_interfaces.msg import Time
+from rclpy.time import Time as RclpyTime
 
 SENSOR_DEPTH = 40
 
@@ -38,27 +41,79 @@ class NodeEgoController(Node):
             qos = qos_profile_sensor_data
             qos.reliability = QoSReliabilityPolicy.RELIABLE
 
-            self.__world_model = WorldModel()
+            self.__vehicles = ['vehicle', 'vehicle1']
+            self.__world_model = WorldModel(self.__vehicles)
             self.__ws = None
             
             package_dir = get_package_share_directory("webots_ros2_suv")
+            self.__ackermann_publishers = {}
+            self.__local_coords = {}
+            for vehicle in self.__vehicles:
+                self.create_subscription(Odometry, f'/{vehicle}/odom', lambda msg, v = vehicle: self.__on_odom_message(msg, v), qos)
+                self.create_subscription(sensor_msgs.msg.Image, f'/{vehicle}/camera/image_color', lambda msg, v = vehicle: self.__on_image_message(msg, v), qos)
+                self.create_subscription(sensor_msgs.msg.PointCloud2, f"/{vehicle}/lidar", lambda msg, v = vehicle: self.__on_lidar_message(msg, v), qos)
 
-            self.create_subscription(Odometry, '/odom', self.__on_odom_message, qos)
-            self.create_subscription(sensor_msgs.msg.Image, '/vehicle/camera/image_color', self.__on_image_message, qos)
-            self.create_subscription(sensor_msgs.msg.PointCloud2, "/lidar", self.__on_lidar_message, qos)
-
-            self.__ackermann_publisher = self.create_publisher(AckermannDrive, 'cmd_ackermann', 1)
+                self.__ackermann_publishers[vehicle] = self.create_publisher(AckermannDrive, f'/{vehicle}/cmd_ackermann', 1)
             
+            # Таймер для периодического выполнения
+            timer_period = 0.2  # Период в секундах
+            self.create_timer(timer_period, self.save_image)
+            self.start_time = self.get_clock().now()
             self.start_web_server()
 
         except  Exception as err:
             self._logger.error(''.join(traceback.TracebackException.from_exception(err).format()))
 
+    def save_image(self):
+        # Вычисляем прошедшее время
+        current_time = self.get_clock().now()
+        elapsed_time = current_time - self.start_time
+        delta = timedelta(seconds=int(elapsed_time.nanoseconds / 1e9))
+
+        # Получаем часы, минуты и секунды
+        hh = delta.seconds // 3600
+        mm = (delta.seconds % 3600) // 60
+        ss = delta.seconds % 60
+        ms = int((elapsed_time.nanoseconds % 1e9) / 1e6)  # Миллисекунды
+
+        # Формируем строку для каждого автомобиля
+        vehicle_strings = []
+        images = []
+        for vehicle in self.__vehicles:
+            lat, lon, angle = self.__local_coords[vehicle]
+            vehicle_strings.append(f"{lat:.6f}:{lon:.6f}:{angle:.6f}")
+            image = self.__world_model.get_rgb_image(vehicle)
+            if image is not None:
+                images.append(image)
+
+        # Объединяем строку в требуемом формате
+        n = len(self.__vehicles)
+        filename = f"{n}_{hh:02}:{mm:02}:{ss:02}.{ms:03}_" + "_".join(vehicle_strings) + ".png"
+
+        if images:
+            stitched_image = self.stitch_images(images)
+            cv2.imwrite(f'/ulstu/repositories/webots_ros2_suv/data/{filename}', stitched_image)
+            # cv2.imshow('img', stitched_image)
+            # if cv2.waitKey(25) & 0xFF == ord('q'):
+            #     return 
+        self._logger.info(f'FILENAME: {filename}')
+
+    def stitch_images(self, images):
+        """Склеивание изображений по горизонтали."""
+        # Убедимся, что все изображения имеют одинаковую высоту
+        max_height = max(img.shape[0] for img in images)
+        resized_images = [
+            cv2.resize(img, (int(img.shape[1] * max_height / img.shape[0]), max_height))
+            for img in images
+        ]
+        # Склеивание изображений
+        return cv2.hconcat(resized_images)
+    
     def start_web_server(self):
         self.__ws = MapWebServer(log=self._logger.info)
         threading.Thread(target=start_web_server, args=[self.__ws]).start()
 
-    def __on_lidar_message(self, data):
+    def __on_lidar_message(self, data, vehicle):
         pass
 
     def __on_range_image_message(self, data):
@@ -68,19 +123,18 @@ class NodeEgoController(Node):
         
         range_image = image / SENSOR_DEPTH
 
-    def drive(self):
-        self.__world_model.command_message.speed = 5.0
-        self.__world_model.command_message.steering_angle = 0.0
+    def drive(self, vehicle):
+        dmsg = AckermannDrive()
+        dmsg.speed = 10.0 if vehicle == "vehicle" else 8.0 # для разных автомобилей разная скорость
+        dmsg.steering_angle = 0.0
 
-        self.__ackermann_publisher.publish(self.__world_model.command_message)
+        self.__ackermann_publishers[vehicle].publish(dmsg)
 
     #@timeit
-    def __on_image_message(self, data):
+    def __on_image_message(self, data, vehicle):
         image = data.data
         image = np.frombuffer(image, dtype=np.uint8).reshape((data.height, data.width, 4))
         analyze_image = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_RGBA2RGB))
-
-        self.__world_model.rgb_image = np.asarray(analyze_image)
 
         t1 = time.time()
         # TODO: put your code here
@@ -88,19 +142,22 @@ class NodeEgoController(Node):
         
         delta = t2 - t1
         fps = 1 / delta if delta > 0 else 100
-        self._logger.info(f"Current FPS: {fps}")
+        # self._logger.info(f"Current FPS: {fps}")
 
-        pos = self.__world_model.get_current_position()
+        pos = self.__world_model.get_current_position(vehicle)
+        self.__world_model.set_rgb_image(np.asarray(analyze_image), vehicle)
 
-        self.drive()
+
+        self.drive(vehicle)
 
         if self.__ws is not None:
             self.__ws.update_model(self.__world_model)
 
-    def __on_odom_message(self, data):
+    def __on_odom_message(self, data, vehicle):
             roll, pitch, yaw = euler_from_quaternion(data.pose.pose.orientation.x, data.pose.pose.orientation.y, data.pose.pose.orientation.z, data.pose.pose.orientation.w)
             lat, lon, orientation = self.__world_model.coords_transformer.get_global_coords(data.pose.pose.position.x, data.pose.pose.position.y, yaw)
-            self.__world_model.update_car_pos(lat, lon, orientation)
+            self.__local_coords[vehicle] = (data.pose.pose.position.x, data.pose.pose.position.y, yaw)
+            self.__world_model.update_car_pos(lat, lon, orientation, vehicle)
             if self.__ws is not None:
                 self.__ws.update_model(self.__world_model)
 

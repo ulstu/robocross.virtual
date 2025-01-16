@@ -8,7 +8,6 @@ import math
 from ament_index_python.packages import get_package_share_directory
 from .car_model import CarModel
 from .coords_transformer import CoordsTransformer
-from ackermann_msgs.msg import AckermannDrive
 from webots_ros2_suv.lib.map_utils import is_point_in_polygon, calc_dist_point
 from typing import List
 
@@ -16,17 +15,13 @@ class WorldModel(object):
     '''
     Класс, моделирующий параметры внешней среды в привязке к глобальной карте.
     '''
-    def __init__(self):
-        self.__car_model = CarModel()
+    def __init__(self, vehicles):
+        self.__vehicles = vehicles
+        self.__car_models = {}
+        for vehicle in self.__vehicles:
+            self.__car_models[vehicle] = CarModel()
         self.coords_transformer = CoordsTransformer()
-        
-        self.path = None                    # спланированный путь в координатах BEV
-        self.gps_path = None                # спланированный путь в глобальных координатах
-        self.rgb_image = None               # цветное изображение с камеры
-        self.range_image = None             # изображение с камеры глубины
-        self.point_cloud = None             # облако точек от лидара
-        self.command_message = AckermannDrive() # Сообщение типа AckermanDrive для движения автомобиля
-    
+
     def load_map(self, mapyaml):
         self.global_map = []
         for f in mapyaml['features']:
@@ -37,8 +32,8 @@ class WorldModel(object):
                 'seg_num': f['properties'].get('seg_num', 0)
             })
 
-    def get_current_position(self):
-        return self.__car_model.get_position()
+    def get_current_position(self, vehicle):
+        return self.__car_models[vehicle].get_position()
 
     def fill_params(self):
         pos = self.__car_model.get_position()
@@ -51,20 +46,29 @@ class WorldModel(object):
     def draw_scene(self, log=print):
         pass
 
-    def get_speed(self):
-        return self.__car_model.get_speed()
+    def get_speed(self, vehicle):
+        return self.__car_models[vehicle].get_speed(vehicle)
     
-    def set_speed(self, speed):
-        self.__car_model.set_speed(speed)
+    def set_speed(self, speed, vehicle):
+        self.__car_models[vehicle].set_speed(speed)
 
-    def update_car_pos(self, lat, lon, orientation):        
-        self.__car_model.update(lat=lat, lon=lon, orientation=orientation)
+    def set_rgb_image(self, image, vehicle):
+        self.__car_models[vehicle].rgb_image = image
 
-    def get_current_zones(self):
-        lat, lon, o = self.get_current_position()
+    def get_rgb_image(self, vehicle):
+        return self.__car_models[vehicle].rgb_image
+
+    def update_car_pos(self, lat, lon, orientation, vehicle):        
+        self.__car_models[vehicle].update(lat=lat, lon=lon, orientation=orientation)
+
+    def get_current_zones(self, vehicle):
+        lat, lon, o = self.get_current_position(vehicle)
         zones = []
         for p in self.global_map:
             if p['type'] == 'Polygon':
                 if is_point_in_polygon(lat, lon, p['coordinates'][0]): # and self.cur_path_point > 2:
                     zones.append(p)
         return zones
+
+    # def drive(self, vehicle):
+    #     self.__car_models[vehicle].
