@@ -28,8 +28,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.08227416815162038 0.12505776379582384 -0.9887322777017785 0.9694520471719114
-  position -17.71020654360757 21.16057447492014 9.478987075036192
+  orientation 0.1498165484242444 0.609655485625986 -0.7783798498576316 0.4956451869721657
+  position -30.03370629355541 8.788887149068678 15.379149056221157
   follow "vehicle"
 }
 TexturedBackground {
@@ -1065,7 +1065,7 @@ PlasticBarrel {
   translation 112.888 -12.3338 0.1
   name "PlasticBarrel(3)"
 }
-GazelleNext {
+DEF Gazelle1 GazelleNext {
   translation 2.43536 -4.76087 0.5
   controller "<extern>"
   supervisor TRUE
@@ -1141,7 +1141,7 @@ GazelleNext {
     }
   ]
 }
-GazelleNext {
+DEF Gazelle2 GazelleNext {
   translation 4.14269 2.48842 0.5
   name "vehicle1"
   controller "<extern>"
