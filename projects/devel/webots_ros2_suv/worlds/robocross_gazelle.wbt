@@ -1065,10 +1065,11 @@ PlasticBarrel {
   translation 112.888 -12.3338 0.1
   name "PlasticBarrel(3)"
 }
-GazelleNext {
+DEF Gazelle1 GazelleNext {
   translation 2.43536 -4.76087 0.5
   controller "<extern>"
   supervisor TRUE
+  name "vehicle"
   sensorsSlotFront [
     Lidar {
       translation -0.95 0 1.52

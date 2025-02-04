@@ -35,6 +35,7 @@ if "%1"=="exec" goto exec
 if "%1"=="destroy" goto destroy
 if "%1"=="setup-default" goto setup-default
 if "%1"=="setup-interactive" goto setup-interactive
+if "%1"=="disable-ros2-dds" goto disable-ros2-dds
 goto end
 
 :build
@@ -75,6 +76,13 @@ if exist "%ProgramFiles%/NVIDIA Corporation/NVSMI/nvidia-smi.exe" (
 ) else (
     echo NVIDIA GPU not detected.
 )
+goto end
+
+:disable-ros2-dds
+for /f %%i in ('powershell -Command "Get-Random -Minimum 1 -Maximum 255"') do set RANDOM_ID=%%i
+set BASHRC=/ulstu/.bashrc
+@docker exec %IMAGE%-%FLAVOR% sh -c "if grep -q 'export ROS_DOMAIN_ID=' %BASHRC%; then sed -i 's/export ROS_DOMAIN_ID=.*/export ROS_DOMAIN_ID=%RANDOM_ID%/' %BASHRC%; else echo 'export ROS_DOMAIN_ID=%RANDOM_ID%' >> %BASHRC%; fi"
+echo ROS_DOMAIN_ID setup with %RANDOM_ID% value in %IMAGE%-%FLAVOR% container
 goto end
 
 :setup-environment
