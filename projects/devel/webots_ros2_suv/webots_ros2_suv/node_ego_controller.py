@@ -69,7 +69,7 @@ class NodeEgoController(Node):
         range_image = image / SENSOR_DEPTH
 
     def drive(self):
-        self.__world_model.command_message.speed = 5.0
+        self.__world_model.command_message.speed = 20.0
         self.__world_model.command_message.steering_angle = 0.0
 
         self.__ackermann_publisher.publish(self.__world_model.command_message)

@@ -14,7 +14,7 @@ EXTERNPROTO "../protos/GazelleNext.proto"
 
 WorldInfo {
   ERP 0.6
-  basicTimeStep 60
+  basicTimeStep 10
   FPS 30
   optimalThreadCount 4
   lineScale 1
@@ -24,6 +24,7 @@ WorldInfo {
         8
       ]
       softCFM 1e-05
+      maxContactJoints 13
     }
   ]
 }
@@ -936,6 +937,8 @@ Solid {
         }
       }
       roadBoundingObject TRUE
+      rightBorderBoundingObject TRUE
+      leftBorderBoundingObject TRUE
     }
     DEF road Road {
       name "road(2)"
@@ -958,6 +961,8 @@ Solid {
         }
       }
       roadBoundingObject TRUE
+      rightBorderBoundingObject TRUE
+      leftBorderBoundingObject TRUE
     }
     Solid {
       translation 10 0 0.005
@@ -1069,7 +1074,6 @@ DEF Gazelle1 GazelleNext {
   translation 2.43536 -4.76087 0.5
   controller "<extern>"
   supervisor TRUE
-  name "vehicle"
   sensorsSlotFront [
     Lidar {
       translation -0.95 0 1.52
