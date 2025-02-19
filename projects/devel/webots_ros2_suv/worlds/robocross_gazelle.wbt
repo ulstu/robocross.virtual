@@ -24,7 +24,7 @@ WorldInfo {
         8
       ]
       softCFM 1e-05
-      maxContactJoints 15
+      maxContactJoints 13
     }
   ]
 }
@@ -961,6 +961,8 @@ Solid {
         }
       }
       roadBoundingObject TRUE
+      rightBorderBoundingObject TRUE
+      leftBorderBoundingObject TRUE
     }
     Solid {
       translation 10 0 0.005

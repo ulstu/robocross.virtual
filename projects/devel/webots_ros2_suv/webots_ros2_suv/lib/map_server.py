@@ -178,7 +178,8 @@ def start_web_server(map_server):
     try:
 
         cherrypy.config.update({
-            'log.screen': False
+            'log.screen': False,
+            'tools.proxy.on': True
         })
 
         # Отключение всех логеров CherryPy
