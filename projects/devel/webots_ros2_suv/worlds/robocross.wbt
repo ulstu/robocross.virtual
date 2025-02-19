@@ -1,22 +1,25 @@
 #VRML_SIM R2023b utf8
 
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/road/protos/Road.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/road/protos/RoadLine.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/trees/protos/SimpleTree.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/traffic/protos/GenericTrafficLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/BmwX5.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/road/protos/Road.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/road/protos/RoadLine.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/trees/protos/SimpleTree.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/traffic/protos/GenericTrafficLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/devices/velodyne/protos/VelodyneVLP-16.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/humans/pedestrian/protos/Pedestrian.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/vehicles/protos/citroen/CitroenCZero.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/vehicles/protos/lincoln/LincolnMKZ.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/vehicles/protos/mercedes_benz/MercedesBenzSprinter.proto"
 EXTERNPROTO "../protos/MainRoadSign.proto"
 EXTERNPROTO "../protos/GiveWaySign.proto"
 EXTERNPROTO "../protos/PlasticBarrel.proto"
-EXTERNPROTO "../protos/GazelleNext.proto"
 
 WorldInfo {
   ERP 0.6
   basicTimeStep 10
-  FPS 30
-  optimalThreadCount 4
   lineScale 1
   contactProperties [
     ContactProperties {
@@ -24,16 +27,113 @@ WorldInfo {
         8
       ]
       softCFM 1e-05
-      maxContactJoints 15
     }
   ]
 }
 Viewpoint {
-  orientation -0.009126471730558984 0.8634346106407681 0.504378211921745 0.27737846050732434
-  position -21.748530461827826 -11.032990802280084 11.337896560410782
+  orientation 0.042453938511122176 -0.9664372143791434 0.25337082264533806 6.0562858082362325
+  position -17.179229920978905 -3.6988813884033536 8.799526014346078
   follow "vehicle"
 }
 TexturedBackground {
+}
+BmwX5 {
+  translation 3.31885 -5.79711 0.83
+  rotation 0.9929554089719524 -0.11836327798953662 0.005448872994841482 0.07212438106245643
+  controller "<extern>"
+  supervisor TRUE
+  sensorsSlotFront [
+    Camera {
+      translation -2.85 0.734 0.85
+      rotation -0.09965347132281188 0.12987596262571324 0.986509716113003 1.84569
+      children [
+        Pose {
+          translation -0.05 0 0
+          rotation 0 -1 0 1.5708
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.8 0.8 0.8
+                roughness 1
+                metalness 0
+              }
+              geometry Cylinder {
+                height 0.1
+                radius 0.04
+              }
+            }
+          ]
+        }
+      ]
+      name "left_wing_camera"
+      fieldOfView 1
+      width 840
+      height 480
+    }
+    RangeFinder {
+      translation 0 0 0.2
+      name "range_finder"
+      fieldOfView 1
+      width 840
+      height 480
+      minRange 0.5
+      maxRange 40
+    }
+    VelodyneVLP-16 {
+    }
+    Camera {
+      translation -2.12 0 0.93
+      children [
+        Pose {
+          translation -0.05 0 0
+          rotation 0 -1 0 1.5708
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.8 0.8 0.8
+                roughness 1
+                metalness 0
+              }
+              geometry Cylinder {
+                height 0.1
+                radius 0.04
+              }
+            }
+          ]
+        }
+      ]
+      fieldOfView 1
+      width 840
+      height 480
+    }
+  ]
+  sensorsSlotTop [
+    Compass {
+    }
+    InertialUnit {
+      name "inertial_unit"
+    }
+    GPS {
+    }
+  ]
+  sensorsSlotCenter [
+    Accelerometer {
+    }
+    Radar {
+    }
+    Gyro {
+    }
+    Display {
+      width 200
+      height 160
+    }
+  ]
+
+  sensorsSlotRear [
+    VelodyneVLP-16 {
+      name "Velodyne VLP-16_rear"
+    }
+  ]
 }
 Solid {
   children [
@@ -46,7 +146,6 @@ Solid {
   name "solid(2)"
 }
 TexturedBackgroundLight {
-  castShadows FALSE
 }
 Solid {
   translation 126.593 -30.2546 0.530002
@@ -251,7 +350,7 @@ Solid {
       boundingObject USE brick
     }
     Solid {
-      translation 2.70736 -54.05 0
+      translation 2.70736 -54.05 0.331899
       rotation 2.64655e-06 -0.9999999997933533 2.01507e-05 0.07
       children [
         Shape {
@@ -273,7 +372,7 @@ Solid {
       boundingObject USE brick
     }
     Solid {
-      translation 8.19393 -54.05 0
+      translation 8.19393 -54.05 0.716585
       rotation 2.64655e-06 -0.9999999997933533 2.01507e-05 0.07
       children [
         Shape {
@@ -295,7 +394,7 @@ Solid {
       boundingObject USE brick
     }
     Solid {
-      translation 12.7628 -54.05 0
+      translation 12.7628 -54.05 1.03695
       rotation 2.64655e-06 -0.9999999997933533 2.01507e-05 0.07
       children [
         Shape {
@@ -317,7 +416,7 @@ Solid {
       boundingObject USE brick
     }
     Solid {
-      translation 17.7909 -54.05 0
+      translation 17.7909 -54.05 1.38949
       rotation 2.64655e-06 -0.9999999997933533 2.01507e-05 0.07
       children [
         Shape {
@@ -339,7 +438,7 @@ Solid {
       boundingObject USE brick
     }
     Solid {
-      translation 21.0902 -53.22 0
+      translation 21.0902 -53.22 1.41
       rotation 0 0 1 1.5708
       children [
         Shape {
@@ -361,7 +460,7 @@ Solid {
       boundingObject USE brick
     }
     Solid {
-      translation 21.0902 -46.26 0
+      translation 21.0902 -46.26 1.41
       rotation 0 0 1 1.5708
       children [
         Shape {
@@ -383,7 +482,7 @@ Solid {
       boundingObject USE brick
     }
     Solid {
-      translation 21.0902 -40.72 0
+      translation 21.0902 -40.72 1.41
       rotation 0 0 1 1.5708
       children [
         Shape {
@@ -405,7 +504,7 @@ Solid {
       boundingObject USE brick
     }
     Solid {
-      translation 21.0902 -34.36 0
+      translation 21.0902 -34.36 1.41
       rotation 0 0 1 1.5708
       children [
         Shape {
@@ -427,7 +526,7 @@ Solid {
       boundingObject USE brick
     }
     Solid {
-      translation 21.0902 -27.21 0
+      translation 21.0902 -27.21 1.41
       rotation 0 0 1 1.5708
       children [
         Shape {
@@ -449,7 +548,7 @@ Solid {
       boundingObject USE brick
     }
     Solid {
-      translation 21.0902 -21.95 0
+      translation 21.0902 -21.95 1.41
       rotation 0 0 1 1.5708
       children [
         Shape {
@@ -471,7 +570,7 @@ Solid {
       boundingObject USE brick
     }
     Solid {
-      translation 21.0902 -15.93 0
+      translation 21.0902 -15.93 1.41
       rotation 0 0 1 1.5708
       children [
         Shape {
@@ -493,7 +592,7 @@ Solid {
       boundingObject USE brick
     }
     Solid {
-      translation 21.0902 -10.06 0
+      translation 21.0902 -10.06 1.41
       rotation 0 0 1 1.5708
       children [
         Shape {
@@ -515,7 +614,7 @@ Solid {
       boundingObject USE brick
     }
     Solid {
-      translation 21.0902 -4.43 0
+      translation 21.0902 -4.43 1.41
       rotation 0 0 1 1.5708
       children [
         Shape {
@@ -537,7 +636,7 @@ Solid {
       boundingObject USE brick
     }
     Solid {
-      translation 21.0902 0.39 0
+      translation 21.0902 0.39 1.41
       rotation 0 0 1 1.5708
       children [
         Shape {
@@ -905,7 +1004,7 @@ Solid {
   ]
 }
 Solid {
-  translation 0.0478663 -0.137844 0.1
+  translation 0 0 0.78
   children [
     DEF road Road {
       name "road(1)"
@@ -924,7 +1023,7 @@ Solid {
         130 -20 0
       ]
       roadTilt [
-        0, 0, 0, 0
+        0.07, 0.07, 0.07, 0.07
       ]
       startingAngle [
         0
@@ -937,8 +1036,6 @@ Solid {
         }
       }
       roadBoundingObject TRUE
-      rightBorderBoundingObject TRUE
-      leftBorderBoundingObject TRUE
     }
     DEF road Road {
       name "road(2)"
@@ -953,6 +1050,9 @@ Solid {
         130 -20 0
         190 -60 0
       ]
+      roadTilt [
+        0.07, 0.07
+      ]
       appearance Appearance {
         texture ImageTexture {
           url [
@@ -962,63 +1062,22 @@ Solid {
       }
       roadBoundingObject TRUE
     }
-    Solid {
-      translation 10 0 0.005
-      children [
-        Pose {
-          rotation 1 0 0 0
-          children [
-            Pose {
-              rotation 0 0 1 1.5708
-              children [
-                Shape {
-                  appearance PBRAppearance {
-                    roughness 1
-                    metalness 0
-                  }
-                  geometry Box {
-                    size 20 0.5 0.01
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-      name "stop_line"
-      rotationStep 0.261799
-    }
-    Solid {
-      translation 150 -33 0.03
-      children [
-        Pose {
-          rotation 1 0 0 0
-          children [
-            Pose {
-              rotation 0 0 1 0.99
-              children [
-                Pose {
-                  children [
-                    Shape {
-                      appearance PBRAppearance {
-                        roughness 1
-                        metalness 0
-                      }
-                      geometry Box {
-                        size 20 0.5 0.01
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-      name "stop_line_end_adjusted"
-    }
   ]
   name "solid(1)"
+}
+Pedestrian {
+  translation 22.8971 -9.089 1.27
+}
+CitroenCZero {
+  translation 24.6976 -1.30106 1.1
+  rotation 1 0 0 4.692820414042842e-06
+  name "vehicle(1)"
+  controller "autonomous_vehicle"
+}
+LincolnMKZ {
+  translation 60.3212 -9.38723 1.1
+  name "vehicle(2)"
+  controller "autonomous_vehicle"
 }
 Solid {
   translation 107.72 -84.49 -1.29
@@ -1056,6 +1115,11 @@ RectangleArena {
     metalness 0
   }
 }
+MercedesBenzSprinter {
+  translation 85.174 -2.21543 1.4
+  rotation 0 0 1 3.14159
+  controller "autonomous_vehicle"
+}
 MainRoadSign {
   translation 14.5917 -11.5529 0
   rotation 0 0 1 -3.139185307179586
@@ -1065,118 +1129,17 @@ GiveWaySign {
   rotation 0 0 1 -3.134375307179586
 }
 PlasticBarrel {
-  translation 112.888 -12.3338 0.1
-  name "PlasticBarrel(3)"
-}
-DEF Gazelle1 GazelleNext {
-  translation 2.43536 -4.76087 0.5
-  controller "<extern>"
-  supervisor TRUE
-  sensorsSlotFront [
-    Lidar {
-      translation -0.95 0 1.52
-      name "lidar_base"
-      horizontalResolution 1024
-      fieldOfView 6.28318
-      verticalFieldOfView 0.6
-      numberOfLayers 64
-      minRange 1.5
-      maxRange 100
-    }
-    RangeFinder {
-      translation 0 0 0.2
-      name "range_finder"
-      fieldOfView 1
-      width 840
-      height 480
-      minRange 0.5
-      maxRange 40
-    }
-    Camera {
-      translation -0.25 0 1.15
-      children [
-        Pose {
-          translation -0.05 0 0
-          rotation 0 -1 0 1.5708
-          children [
-            Shape {
-              appearance PBRAppearance {
-                baseColor 0.8 0.8 0.8
-                roughness 1
-                metalness 0
-              }
-              geometry Cylinder {
-                height 0.1
-                radius 0.04
-              }
-            }
-          ]
-        }
-      ]
-      fieldOfView 1
-      width 840
-      height 480
-    }
-  ]
-  sensorsSlotTop [
-    Compass {
-      translation 0.4 0 0.3
-    }
-    InertialUnit {
-      translation 0.4 0 0.3
-      name "inertial_unit"
-    }
-    Accelerometer {
-      translation 0.4 0 0
-    }
-    Gyro {
-    }
-    GPS {
-      translation 0.4 0 0.3
-    }
-  ]
-  sensorsSlotCenter [
-    Radar {
-    }
-    Display {
-      width 200
-      height 160
-    }
-  ]
+  translation 12.88 -9.93 0.21
 }
 PlasticBarrel {
-  translation 19.9235 -4.10833 0.1
-  name "PlasticBarrel(2)"
-}
-PlasticBarrel {
-  translation 31.5432 -0.512183 0.1
+  translation 13.91 -9.93 0.21
   name "PlasticBarrel(1)"
 }
 PlasticBarrel {
-  translation 55.3437 -0.387974 0.1
-  name "PlasticBarrel(6)"
+  translation 13.91 -0.62 0.67
+  name "PlasticBarrel(2)"
 }
 PlasticBarrel {
-  translation 103.37 -2.41209 0.1
-  name "PlasticBarrel(8)"
-}
-PlasticBarrel {
-  translation 103.092 -3.14603 0.1
-  name "PlasticBarrel(10)"
-}
-PlasticBarrel {
-  translation 75.7109 5.10587 0.1
-  name "PlasticBarrel(9)"
-}
-PlasticBarrel {
-  translation 55.5218 -8.42203 0.1
-  name "PlasticBarrel(7)"
-}
-PlasticBarrel {
-  translation 31.507 0.309897 0.1
-  name "PlasticBarrel(5)"
-}
-PlasticBarrel {
-  translation 19.7383 -4.98268 0.1
-  name "PlasticBarrel(4)"
+  translation 26.25 -9.18 0.67
+  name "PlasticBarrel(3)"
 }
