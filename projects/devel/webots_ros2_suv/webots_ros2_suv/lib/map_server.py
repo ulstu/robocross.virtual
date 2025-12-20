@@ -53,6 +53,15 @@ class MapWebServer(object):
         self.driving_points = []
         self.driving_points_path = f"{os.path.expanduser('~')}/ros2_ws/data/paths/path_{time.strftime('%Y%m%d-%H%M%S')}.json"
 
+    def get_map_pathpoints(self):
+        with open(f'{BASE_RESOURCE_PATH}/config/global_maps/robocross.geojson') as mapdatafile:
+            map_file = yaml.safe_load(mapdatafile)
+        global_map = []
+        for f in map_file['features']:
+            if f['geometry']['type'] == 'LineString':
+                global_map.append(f['geometry']['coordinates'])
+        return global_map            
+
 
     @cherrypy.expose
     def index(self):
@@ -179,7 +188,7 @@ def start_web_server(map_server):
 
         cherrypy.config.update({
             'log.screen': False,
-            'tools.proxy.on': True
+            'tools.proxy.on': True,
         })
 
         # Отключение всех логеров CherryPy

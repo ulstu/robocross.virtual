@@ -53,6 +53,7 @@ setup(
         'console_scripts': [
             'node_sensors_webots = webots_ros2_suv.node_sensors_webots:main',
             'node_ego_controller = webots_ros2_suv.node_ego_controller:main',
+            'ackermann_keyboard_teleop_node = webots_ros2_suv.ackermann_keyboard_teleop_node:main',
         ],
         'launch.frontend.launch_extension': ['launch_ros = launch_ros']
     }

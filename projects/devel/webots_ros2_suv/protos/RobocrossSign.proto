@@ -1,0 +1,32 @@
+#VRML_SIM R2025a utf8
+
+PROTO RobocrossSign [
+  field SFVec3f    translation              0 0 0
+  field SFRotation rotation                 0 0 1 0
+  field SFString   name                     "robocross_sign"
+]
+{
+  Solid {
+    translation IS translation
+    rotation IS rotation
+    name IS name
+    model "robocross_sign"
+    children [
+      Transform {
+        children [
+          DEF SignMesh Pose {
+            translation 0 0 0
+            rotation 0 0 0 0
+            children [
+              CadShape {
+                url [
+                  "models/RobocrossSign/robocross_sign.dae"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

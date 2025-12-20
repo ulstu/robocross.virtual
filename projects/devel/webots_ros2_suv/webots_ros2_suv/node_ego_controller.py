@@ -40,7 +40,9 @@ class NodeEgoController(Node):
 
             self.__world_model = WorldModel()
             self.__ws = None
-            
+
+            self.__pathpoints = None
+
             package_dir = get_package_share_directory("webots_ros2_suv")
 
             self.create_subscription(Odometry, '/odom', self.__on_odom_message, qos)
@@ -57,6 +59,7 @@ class NodeEgoController(Node):
     def start_web_server(self):
         self.__ws = MapWebServer(log=self._logger.info)
         threading.Thread(target=start_web_server, args=[self.__ws]).start()
+        self.__pathpoints = self.__ws.get_map_pathpoints()
 
     def __on_lidar_message(self, data):
         pass
@@ -68,9 +71,9 @@ class NodeEgoController(Node):
         
         range_image = image / SENSOR_DEPTH
 
-    def drive(self):
-        self.__world_model.command_message.speed = 20.0
-        self.__world_model.command_message.steering_angle = 0.0
+    def drive(self, wheel, speed):
+        self.__world_model.command_message.speed = float(speed)
+        self.__world_model.command_message.steering_angle = float(wheel)
 
         self.__ackermann_publisher.publish(self.__world_model.command_message)
 
@@ -82,17 +85,19 @@ class NodeEgoController(Node):
 
         self.__world_model.rgb_image = np.asarray(analyze_image)
 
+        pos = self.__world_model.get_current_position()
+
         t1 = time.time()
         # TODO: put your code here
+        steering = 0
+        drive = 5
         t2 = time.time()
         
         delta = t2 - t1
         fps = 1 / delta if delta > 0 else 100
         self._logger.info(f"Current FPS: {fps}")
 
-        pos = self.__world_model.get_current_position()
-
-        self.drive()
+        self.drive(steering, drive)
 
         if self.__ws is not None:
             self.__ws.update_model(self.__world_model)

@@ -24,10 +24,10 @@ class SUVDriver:
             self.__node._logger.info(f'type: {type(self.__robot)}')
         except  Exception as err:
             print(f'{str(err)}')
-        
+
     def __cmd_ackermann_callback(self, message):
         self.__robot.setCruisingSpeed(message.speed)
-        self.__robot.setSteeringAngle(message.steering_angle)
+        self.__robot.setSteeringAngle(max(-0.8, min(0.8, message.steering_angle)))
 
     def step(self, d=0):
         try:

@@ -1,0 +1,32 @@
+#VRML_SIM R2025a utf8
+
+PROTO WinderFinish [
+  field SFVec3f    translation              0 0 0
+  field SFRotation rotation                 0 0 1 0
+  field SFString   name                     "winder_finish"
+]
+{
+  Solid {
+    translation IS translation
+    rotation IS rotation
+    name IS name
+    model "winder_finish"
+    children [
+      Transform {
+        children [
+          DEF SignMesh Pose {
+            translation 0 0 0
+            rotation 0 0 0 0
+            children [
+              CadShape {
+                url [
+                  "models/WinderFinish/winder_finish.dae"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

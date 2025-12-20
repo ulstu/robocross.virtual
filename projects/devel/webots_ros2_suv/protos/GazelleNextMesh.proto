@@ -3,7 +3,7 @@
 # license url: https://cyberbotics.com/webots_assets_license
 # tags: hidden
 
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/appearances/protos/GlossyPaint.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/appearances/protos/GlossyPaint.proto"
 
 PROTO GazelleNextMesh [
   field     SFColor  color                    0.43 0.11 0.1
@@ -17,10 +17,10 @@ PROTO GazelleNextMesh [
         children [
           Shape {
             appearance PBRAppearance {
-              metalness 0
+              roughness 0.1
+              metalness 0.7
               baseColor IS color
             }
-            castShadows FALSE
             geometry Mesh {
               url [
                 "models/GazelleNextBody.dae"
@@ -36,10 +36,9 @@ PROTO GazelleNextMesh [
           Shape {
             appearance PBRAppearance {
               baseColor 0.196078 0.196078 0.196078
-              roughness 0.4
-              metalness 0
+              roughness 0.6
+              metalness 0.2
             }
-            castShadows FALSE
             geometry Mesh {
               url [
                 "models/GazelleNextPlastic.dae"
@@ -55,12 +54,30 @@ PROTO GazelleNextMesh [
           Shape {
             appearance PBRAppearance {
               baseColor 1 1 1
-              roughness 0.4
-              metalness 0
+              metalness 0.5
             }
+            castShadows FALSE
             geometry Mesh {
               url [
                 "models/GazelleNextLights.dae"
+              ]
+            }
+          }
+        ]
+      }
+      DEF TANTPARTS Pose {
+        translation 0 0.85 1.75
+        rotation 0 0 0 0
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0.7 0.7 0.7
+              roughness 0.6
+              metalness 0.2
+            }
+            geometry Mesh {
+              url [
+                "models/GazelleNextTant.dae"
               ]
             }
           }

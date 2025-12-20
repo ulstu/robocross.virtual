@@ -4,7 +4,7 @@
 # tags: hidden
 # template language: javascript
 
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/appearances/protos/Leather.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/appearances/protos/Leather.proto"
 
 PROTO GazelleNextInterior []
 {
@@ -20,7 +20,6 @@ PROTO GazelleNextInterior []
               roughness 0.4
               metalness 0
             }
-            castShadows FALSE
             geometry Mesh {
               url [
                 "models/GazelleNextInterior.dae"

@@ -8,10 +8,10 @@
 # For the last 6 fields to have any effect, the 'interior' has to be enabled.
 # template language: javascript
 
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/abstract/CarSteeringWheel.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/abstract/Car.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/abstract/VehicleLights.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/vehicles/protos/abstract/CarSteeringWheel.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/vehicles/protos/abstract/Car.proto"
 EXTERNPROTO "GazelleNextWheel.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/vehicles/protos/abstract/VehicleLights.proto"
 EXTERNPROTO "GazelleNextMesh.proto"
 EXTERNPROTO "GazelleNextInterior.proto"
 
@@ -66,12 +66,18 @@ PROTO GazelleNext [
     trackFront 1.75
     trackRear 1.75
     wheelbase 4.3
-    time0To100 7
+    time0To100 15
     engineMinRPM 1000
     engineMaxRPM 6500
-    brakeCoefficient 1800  # calibrated for braking from 100 to 0km/h in 36.5m
+    maxSteeringTorque              2500
+    brakeCoefficient 500  # calibrated for braking from 100 to 0km/h in 36.5m
     engineFunctionCoefficients 34.11 0.136 -0.00001461
     wheelsDampingConstant 2
+    suspensionFrontSpringConstant  350000
+    suspensionFrontDampingConstant 9000
+    suspensionRearSpringConstant   200000
+    suspensionRearDampingConstant  6000
+    type                           "propulsion"
     gearRatio   [-12.5 12.5 8 5.35 4.3 4]
     wheelFrontLeft GazelleNextWheel {
       name "front left wheel"
@@ -377,7 +383,7 @@ PROTO GazelleNext [
       %< } >%
     ]
     name IS name
-    model "BMW X5"
+    model "Gazelle Next"
     controller IS controller
     controllerArgs IS controllerArgs
     supervisor IS supervisor
@@ -385,29 +391,29 @@ PROTO GazelleNext [
     boundingObject Group {
       children [
         Transform {
-          translation 3.7 0 0.8
+          translation 2.9 0 0.9
           rotation 0.57735 0.57735 0.57735 2.094395
           children [
             Box {
-              size 2.0 2.16 3.2
+              size 2 1.7 1.4
             }
           ]
         }
         Transform {
-          translation 3.95 0.02 1.13
+          translation 0.4 0 0.63
           rotation 0.57735 0.57735 0.57735 2.094395
           children [
             Box {
-              size 2.48 0.35 0.15
+              size 2 0.7 3.5
             }
           ]
         }
         Transform {
-          translation 0.5 0 0.05
+          translation 2 0 0.4
           rotation 0.57735 0.57735 0.57735 2.094395
           children [
             Box {
-              size 2.0 0.78 3.41
+              size 1.73 0.78 6.3
             }
           ]
         }
@@ -419,13 +425,9 @@ PROTO GazelleNext [
     ]
     physics Physics {
       density -1
-      mass 2000
+      mass 4600
       centerOfMass [
-        1.2975 0 0.1
-      ]
-      inertiaMatrix [
-        1125.07 4473.54 4346.1
-        0 846.89 0
+        3.5 0 0.1
       ]
     }
     window IS window
