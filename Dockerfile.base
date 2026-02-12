@@ -27,7 +27,6 @@ RUN apt-get update && apt-get install --no-install-recommends -y -o Dpkg::Option
     ros-humble-ros2-control \
     ros-humble-ros2-controllers \
     ros-humble-rqt-common-plugins \
-    ros-humble-webots-ros2 \
     ros-humble-nav2-common \
     ros-humble-dynamixel-workbench-toolbox \
     ros-humble-behaviortree-cpp \
@@ -113,6 +112,13 @@ RUN cat /tmp/bashrc >> /ulstu/.bashrc && \
     mkdir  -p /ulstu/ros2_ws/src && \
     chown -R ulstu:ulstu /ulstu
 
+USER ulstu
+# Webots ROS2 from source (version 2023.1.3)
+RUN cd /ulstu/ros2_ws/src && \
+    git clone --recurse-submodules --branch 2023.1.3 https://github.com/cyberbotics/webots_ros2.git
+    # && \
+    # chown -R ulstu:ulstu /ulstu/ros2_ws
+
 
 #RUN sudo -E rosdep init 
 RUN apt-get install -y python3-vcstool
@@ -121,7 +127,6 @@ RUN cd /ulstu/ros2_ws && yes | rosdep --rosdistro "${ROS_DISTRO}" install -r --f
 
 RUN pip3 install matplotlib scipy --upgrade 
 
-USER ulstu
 WORKDIR /ulstu/ros2_ws
 
 EXPOSE 31415

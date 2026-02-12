@@ -18,7 +18,7 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/project
 
 WorldInfo {
   ERP 0.6
-  basicTimeStep 10
+  basicTimeStep 24
   FPS 30
   optimalThreadCount 4
   lineScale 1
