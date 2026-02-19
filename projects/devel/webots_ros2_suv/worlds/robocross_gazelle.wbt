@@ -15,6 +15,7 @@ EXTERNPROTO "../protos/WinderGaz.proto"
 EXTERNPROTO "../protos/GazelleNext.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/trees/protos/Forest.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/UnevenTerrain.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/solids/protos/SolidBox.proto"
 
 WorldInfo {
   ERP 0.6
@@ -33,8 +34,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.16611933860031758 0.05166991482465855 -0.9847510270342477 2.595301170447415
-  position 26.079126347234585 6.910090646442838 9.67135373365613
+  orientation -0.17843641152971212 -0.09496934842010782 0.9793575802029917 3.8607517218709444
+  position 20.932208681385298 9.422973514905046 10.658689416063641
   follow "vehicle"
 }
 TexturedBackground {
@@ -1822,7 +1823,7 @@ DEF Road Solid {
       width 20
       lines [
         RoadLine {
-          type "continuous"
+          type "none"
         }
       ]
       rightBarrier TRUE
@@ -1855,7 +1856,7 @@ DEF Road Solid {
       width 20
       lines [
         RoadLine {
-          type "continuous"
+          type "none"
         }
       ]
       roadBorderHeight 0
@@ -1880,7 +1881,7 @@ DEF Road Solid {
       width 20
       lines [
         RoadLine {
-          type "continuous"
+          type "none"
         }
       ]
       roadBorderHeight 0
@@ -2311,4 +2312,99 @@ UnevenTerrain {
   randomSeed 7
   flatBounds TRUE
   perlinNOctaves 9
+}
+SolidBox {
+  translation 63.3771 -33.1528 2.01
+  rotation 0 0 -1 0.2
+  size 52 2 5
+  appearance PBRAppearance {
+    transparency 1
+    roughness 0.5
+    metalness 0
+  }
+  castShadows FALSE
+}
+SolidBox {
+  translation 177.509 -71.1582 2.01
+  rotation 0 0 -1 -0.8510553071795863
+  name "box(1)"
+  size 10 2 5
+  appearance PBRAppearance {
+    transparency 1
+    roughness 0.5
+    metalness 0
+  }
+  castShadows FALSE
+}
+SolidBox {
+  translation 142.309 -60.6304 2.01
+  rotation 0 0 1 2.68365
+  name "box(2)"
+  size 68 2 5
+  appearance PBRAppearance {
+    transparency 1
+    roughness 0.5
+    metalness 0
+  }
+  castShadows FALSE
+}
+SolidBox {
+  translation 117.758 -83.557 2.01
+  rotation 0 0 1 2.68365
+  name "box(3)"
+  size 45 2 5
+  appearance PBRAppearance {
+    transparency 1
+    roughness 0.5
+    metalness 0
+  }
+  castShadows FALSE
+}
+SolidBox {
+  translation 150.737 -97.2019 2.01
+  rotation 0 0 1 2.8
+  name "box(4)"
+  size 45 2 5
+  appearance PBRAppearance {
+    transparency 1
+    roughness 0.5
+    metalness 0
+  }
+  castShadows FALSE
+}
+SolidBox {
+  translation 43.0353 -55.2257 2.01
+  rotation 0 0 1 2.85
+  name "box(5)"
+  size 76 2 5
+  appearance PBRAppearance {
+    transparency 1
+    roughness 0.5
+    metalness 0
+  }
+  castShadows FALSE
+}
+SolidBox {
+  translation 14.951 -18.7827 2.01
+  rotation 0 0 1 2.0646
+  name "box(6)"
+  size 13 2 5
+  appearance PBRAppearance {
+    transparency 1
+    roughness 0.5
+    metalness 0
+  }
+  castShadows FALSE
+}
+SolidBox {
+  translation 32.0385 -26.6363 2.01
+  rotation 0 0 1 3
+  name "box(7)"
+  size 29 2 5
+  appearance PBRAppearance {
+    transparency 1
+    roughness 0.5
+    metalness 0
+  }
+  castShadows FALSE
 }
